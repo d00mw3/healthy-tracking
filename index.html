@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f3d2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Healthy Tracking">
+<meta name="application-name" content="Healthy Tracking">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<title>Healthy Tracking</title>
+<style>
+:root{color-scheme:light dark;
+--bg:light-dark(#f6f5f1,#0d1512);--card:light-dark(#fff,#16211d);--ink:light-dark(#14201b,#e8efe9);
+--mute:light-dark(#5d6b64,#93a39b);--line:light-dark(#e2e4de,#26332d);--brand:#0f3d2e;--acc:#1f9d63;--warn:#d9822b;--low:#8a94a6;--pp:#d4688a;--pc:#e0a92e;--pv:#43a463;
+--hink:#fff;--accInk:#fff}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;-webkit-tap-highlight-color:transparent;
+padding:env(safe-area-inset-top) env(safe-area-inset-right) calc(76px + env(safe-area-inset-bottom)) env(safe-area-inset-left)}
+header{background:var(--brand);color:var(--hink);padding:14px 16px 22px;border-radius:0 0 26px 26px;background-image:radial-gradient(120% 90% at 100% 0,color-mix(in srgb,var(--acc) 35%,transparent),transparent 60%)}
+header .row{display:flex;align-items:center;gap:8px}
+header h1{font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0;flex:1;letter-spacing:-.01em;font-weight:700}
+.datebtn{background:color-mix(in srgb,var(--hink) 15%,transparent);border:0;color:var(--hink);border-radius:10px;padding:8px 12px;font:inherit;min-height:40px}
+.hero{display:grid;grid-template-columns:132px minmax(0,1fr);gap:18px;align-items:center;margin-top:14px}
+.ring{position:relative;width:132px;height:132px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:11;stroke-linecap:round}
+.rt{stroke:color-mix(in srgb,var(--hink) 16%,transparent)}
+.rp{stroke:color-mix(in srgb,var(--acc) 65%,var(--hink));stroke-dasharray:326.7;stroke-dashoffset:326.7;transition:stroke-dashoffset .8s cubic-bezier(.2,.8,.2,1),stroke .3s}
+.rp.over{stroke:var(--warn)}
+.rc{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.rc b{font-size:30px;line-height:1;letter-spacing:-.02em}.rc span{font-size:12px;opacity:.8;margin-top:3px}
+.mr{display:grid;grid-template-columns:minmax(0,1fr) auto;font-size:13px;row-gap:3px}
+.mr span{opacity:.85}.mr b{font-size:13px;white-space:nowrap}.mr .bar{grid-column:1/-1;height:6px;margin:0 0 7px}
+.left{margin-top:12px;font-size:14px;opacity:.9;text-align:center}
+.bar{height:10px;background:color-mix(in srgb,var(--hink) 18%,transparent);border-radius:6px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;transition:width .7s cubic-bezier(.2,.8,.2,1);background:color-mix(in srgb,var(--acc) 60%,var(--hink));border-radius:6px;transition:width .4s}
+main{padding:12px;max-width:720px;margin:0 auto}
+.card{background:var(--card);border:1px solid color-mix(in srgb,var(--line) 70%,transparent);border-radius:18px;padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 2px #0000000a,0 6px 20px -8px #00000014}
+.card h2{font-size:16px;margin:0 0 6px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.card h2 small{color:var(--mute);font-weight:400;font-size:13px}
+.pill{background:color-mix(in srgb,var(--acc) 14%,transparent);color:var(--ink);border-radius:20px;padding:3px 10px;font-size:13px;font-weight:600;white-space:nowrap}
+.empty{color:var(--mute);font-size:14px;padding:4px 0 2px}
+.item{display:flex;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
+.item:first-of-type{border-top:0}
+.item .nm{flex:1}.item .nm div{font-size:13px;color:var(--mute)}
+.item .kc{font-weight:600;white-space:nowrap}
+button{font:inherit;cursor:pointer;transition:transform .12s,background-color .2s,opacity .2s}
+button:active{transform:scale(.96)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.btn{background:var(--acc);color:var(--accInk);border:0;border-radius:10px;padding:10px 14px;min-height:44px;font-weight:600}
+.btn.ghost{background:transparent;color:var(--acc);border:1px solid var(--acc)}
+.btn.sm{min-height:36px;padding:6px 10px;font-size:14px}
+.x{background:none;border:0;color:var(--mute);font-size:20px;min-width:40px;min-height:40px}
+.add{background:none;border:0;color:var(--acc);font-weight:600;padding:8px 0;min-height:40px}
+nav{position:fixed;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--card) 82%,transparent);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav button{flex:1;background:none;border:0;color:var(--mute);padding:8px 0 10px;font-size:12px;min-height:58px;display:flex;flex-direction:column;align-items:center;gap:3px}
+nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;padding:2px 14px;box-sizing:content-box;border-radius:14px;transition:background-color .25s}
+nav button.on{color:var(--acc);font-weight:700}
+nav button.on svg{background:color-mix(in srgb,var(--acc) 16%,transparent)}
+input,select{font:inherit;font-size:16px;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);min-height:44px}
+label{font-size:13px;color:var(--mute);display:block;margin:8px 0 4px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:8px 0}
+.chip{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:20px;padding:6px 12px;min-height:36px}
+.chip.on{background:var(--brand);color:var(--hink);border-color:var(--brand)}
+.srow{display:flex;gap:8px;flex-wrap:wrap}.srow>input{flex:1 1 160px}
+.res{padding:10px 0;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.res .nm{flex:1}.res .nm div{font-size:13px;color:var(--mute)}
+.msg{color:var(--mute);font-size:14px;padding:6px 0}
+.sheet{position:fixed;inset:0;background:#0000;display:flex;align-items:flex-end;z-index:10;visibility:hidden;transition:background-color .25s,visibility 0s .3s}
+.sheet.open{background:#0007;visibility:visible;transition:background-color .25s}
+.sheet>div{transform:translateY(100%);transition:transform .32s cubic-bezier(.2,.9,.2,1)}
+.sheet.open>div{transform:none}
+.grab{display:block;width:40px;height:5px;border-radius:3px;background:var(--line);margin:-6px auto 12px}
+.sheet>div{background:var(--card);width:100%;max-width:720px;margin:0 auto;border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.grid5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;text-align:center;font-size:12px;margin:10px 0}
+.grid5 b{display:block;font-size:16px}
+.tgt{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:6px}
+.tgt div{background:var(--bg);border-radius:12px;padding:12px}
+.tgt b{display:block;font-size:26px;line-height:1.1}.tgt small{color:var(--mute);font-size:12px;display:block;margin-top:4px}
+.m{display:grid;grid-template-columns:4.6em minmax(0,1fr) 7.6em;gap:8px;align-items:center;font-size:13px;padding:3px 0}
+.m .tr{height:8px;background:var(--line);border-radius:5px;overflow:hidden}
+.m .tr i{display:block;height:100%;border-radius:5px;background:var(--acc)}
+.m .tr i.lo{background:var(--low)}.m .tr i.mid{background:var(--warn)}.m .tr i.hi{background:var(--warn)}
+.m span:last-child{text-align:right;white-space:nowrap}
+.pct{font-weight:700}
+.day h3{font-size:15px;margin:0 0 4px;display:flex;justify-content:space-between}
+.day h3 small{color:var(--mute);font-weight:400}
+.key{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--mute)}
+.key i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+video{width:100%;border-radius:10px;background:#000;max-height:260px}
+textarea{width:100%;min-height:120px;font:13px/1.4 ui-monospace,monospace;border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--bg);color:var(--ink)}
+.hide{display:none!important}
+section{animation:in .28s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(6px)}}
+.slideL{animation:sl .28s ease-out}.slideR{animation:sr .28s ease-out}
+@keyframes sl{from{opacity:0;transform:translateX(24px)}}@keyframes sr{from{opacity:0;transform:translateX(-24px)}}
+.toast{position:fixed;left:50%;bottom:calc(74px + env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;pointer-events:none;
+ background:var(--ink);color:var(--bg);border-radius:14px;padding:6px 6px 6px 16px;display:flex;align-items:center;gap:10px;font-size:14px;
+ box-shadow:0 8px 30px #0003;transition:opacity .25s,transform .25s;z-index:20;max-width:calc(100% - 24px)}
+.toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.toast span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.toast button{background:none;border:0;color:var(--acc);font-weight:700;min-height:40px;padding:0 12px;filter:brightness(1.3)}
+.quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.quick button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:20px;padding:6px 12px;min-height:36px;font-size:14px}
+.sk{height:58px;border-radius:12px;margin-top:10px;background:linear-gradient(90deg,var(--line) 25%,color-mix(in srgb,var(--line) 40%,var(--card)) 50%,var(--line) 75%);background-size:200% 100%;animation:sh 1.1s infinite linear}
+@keyframes sh{to{background-position:-200% 0}}
+.onb{position:fixed;inset:0;z-index:30;background:var(--bg);overflow:auto;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.onb .top{background:var(--brand);color:var(--hink);padding:28px 20px 30px;border-radius:0 0 26px 26px;
+ background-image:radial-gradient(120% 90% at 100% 0,color-mix(in srgb,var(--acc) 35%,transparent),transparent 60%)}
+.onb .top h2{font-size:28px;margin:0 0 6px;letter-spacing:-.02em}.onb .top p{margin:0;opacity:.85}
+.onb form,.onb .done{max-width:560px;margin:0 auto;padding:16px}
+.onb .err{color:#c94a3a;font-size:14px;min-height:20px;margin-top:8px}
+.onb .tgt b{font-size:24px}
+/* habits, plates, recipes, guide */
+.hab{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px 10px;padding:8px 0}
+.hab+.hab{border-top:1px solid var(--line)}
+.hab .lab b{display:block;font-size:15px}.hab .lab small{color:var(--mute);font-size:13px}
+.step{display:flex;align-items:center;gap:6px}
+.step button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:20px;line-height:1}
+.step b{min-width:2ch;text-align:center;font-size:18px}
+.dots{grid-column:1/-1;display:flex;gap:5px}.dots i{flex:1;height:7px;border-radius:4px;background:var(--line);transition:background-color .3s}
+.dots i.on{background:var(--pv)}.dots.w i.on{background:#3d8fd6}
+.plate{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:2px 0 6px}
+.plate svg{width:30px;height:30px;flex:none}
+.ptag{border:1px solid var(--line);border-radius:16px;padding:4px 10px;font-size:13px;background:none;color:var(--mute);min-height:32px}
+.ptag.on.p{background:color-mix(in srgb,var(--pp) 18%,transparent);border-color:var(--pp);color:var(--ink)}
+.ptag.on.c{background:color-mix(in srgb,var(--pc) 22%,transparent);border-color:var(--pc);color:var(--ink)}
+.ptag.on.v{background:color-mix(in srgb,var(--pv) 18%,transparent);border-color:var(--pv);color:var(--ink)}
+.calm{text-align:center;padding:26px 16px}.calm h2{justify-content:center;font-size:20px}.calm p{color:var(--mute)}
+.lim .m .tr i{background:var(--low)}.lim .m .tr i.hi{background:var(--warn)}
+.seg2{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:10px}
+.seg2 button{border:0;background:none;color:var(--ink);border-radius:9px;min-height:40px;font-weight:600}
+.seg2 button.on{background:var(--brand);color:var(--hink)}
+details.rec{padding:0;overflow:hidden}
+details.rec summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:center}
+details.rec summary::-webkit-details-marker{display:none}
+details.rec summary svg{width:34px;height:34px}
+details.rec summary b{display:block;font-size:16px;line-height:1.25}
+details.rec summary small{color:var(--mute);font-size:13px}
+details.rec .body{padding:0 16px 14px}
+details.rec ul{margin:6px 0 10px;padding-left:20px}details.rec li{margin:2px 0}
+details.rec h4{margin:10px 0 2px;font-size:14px}
+.ntab{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;text-align:center;font-size:12px;color:var(--mute);margin:8px 0 12px}
+.ntab b{display:block;font-size:15px;color:var(--ink)}
+.note{background:color-mix(in srgb,var(--warn) 12%,transparent);border-radius:10px;padding:8px 10px;font-size:14px;margin:8px 0}
+.guide p,.guide li{font-size:15px}.guide ul{padding-left:20px;margin:6px 0}.guide a{color:var(--acc);font-weight:600}
+.guide .bigplate{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;align-items:center}
+.guide .bigplate svg{width:120px;height:120px}
+.lg span{display:flex;align-items:center;gap:8px;font-size:14px;margin:4px 0}.lg i{width:12px;height:12px;border-radius:3px;flex:none}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0}
+.switch input{appearance:none;width:52px;height:32px;border-radius:16px;background:var(--line);position:relative;flex:none;min-height:0;padding:0;border:0;transition:background-color .2s}
+.switch input::after{content:'';position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0003;transition:transform .2s}
+.switch input:checked{background:var(--acc)}.switch input:checked::after{transform:translateX(20px)}
+.nonum .num,.nonum #kcal,.nonum #kcalOf,.nonum .mr b,.nonum .m>span:last-child,.nonum .kc,.nonum .pill{display:none!important}
+.nonum .m{grid-template-columns:4.6em minmax(0,1fr)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media(max-width:360px){.hero{grid-template-columns:112px minmax(0,1fr);gap:12px}.ring{width:112px;height:112px}.rc b{font-size:25px}}
+.pal{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;margin:6px 0 4px}
+.pal button{border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:8px;min-height:64px;font-size:13px;text-align:left}
+.pal button.on{border-color:var(--acc)}
+.sw{display:flex;gap:3px;margin-bottom:6px}.sw i{flex:1;height:18px;border-radius:5px;border:1px solid #0002}
+.pick{display:flex;align-items:center;gap:10px;padding:6px 0}
+.pick input[type=color]{width:52px;height:40px;padding:2px;border-radius:8px;flex:none}
+.pick span{flex:1;font-size:14px}
+.seg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;background:var(--bg);border-radius:10px;padding:4px}
+.seg button{border:0;background:none;color:var(--ink);border-radius:8px;min-height:40px;font-size:14px}
+.seg button.on{background:var(--acc);color:var(--accInk);font-weight:600}
+.src{font-size:12px;color:var(--mute);margin-top:10px}
+.wlist{font-size:14px}.wlist div{display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid var(--line)}
+@media(max-width:380px){.macros{gap:6px}.macros b{font-size:12px}.m{grid-template-columns:4em minmax(0,1fr) 6.8em;font-size:12px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="row"><h1>Healthy Tracking</h1>
+    <button class="datebtn" id="prev" aria-label="Previous day">‹</button>
+    <button class="datebtn" id="dateLbl">Today</button>
+    <button class="datebtn" id="next" aria-label="Next day">›</button></div>
+  <div class="hero">
+    <div class="ring">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="rt" cx="60" cy="60" r="52"/><circle class="rp" id="ringP" cx="60" cy="60" r="52"/></svg>
+      <div class="rc"><b id="kcal">0</b><span id="kcalOf">kcal</span></div>
+    </div>
+    <div class="macros">
+      <div class="mr"><span>Protein</span><b id="pTxt"></b><div class="bar"><i id="pBar"></i></div></div>
+      <div class="mr"><span>Carbs</span><b id="cTxt"></b><div class="bar"><i id="cBar"></i></div></div>
+      <div class="mr"><span>Fibre</span><b id="fbTxt"></b><div class="bar"><i id="fbBar"></i></div></div>
+      <div class="mr"><span>Fat</span><b id="fTxt"></b><div class="bar"><i id="fBar"></i></div></div>
+    </div>
+  </div>
+  <div class="left" id="kcalLeft"></div>
+</header>
+
+<main>
+  <section id="vDay"></section>
+
+  <section id="vAdd" class="hide">
+    <div class="card">
+      <h2>Add food <small id="addMeal"></small></h2>
+      <div class="srow"><input id="q" type="search" placeholder="e.g. chicken breast, oats, protein yoghurt" enterkeyhint="search">
+        <button class="btn" id="go">Search</button></div>
+      <div class="chips" id="stores"></div>
+      <div class="srow"><input id="bc" inputmode="numeric" placeholder="Barcode number">
+        <button class="btn ghost" id="bcGo">Look up</button>
+        <button class="btn ghost" id="scan">Scan</button></div>
+      <video id="vid" class="hide" playsinline muted></video>
+      <div id="results"></div>
+      <div class="src">Supermarket data from Open Food Facts (open database, figures taken from packaging). Check the label if something looks off. Some products have no fibre figure; those count as 0g.</div>
+    </div>
+    <div class="card"><h2>Recent &amp; favourites</h2><div id="recent"></div></div>
+    <div class="card"><button class="btn ghost" id="custom" style="width:100%">Create custom food</button></div>
+  </section>
+
+  <section id="vEat" class="hide">
+    <div class="seg2"><button data-eat="rec" class="on">Recipes</button><button data-eat="guide">NHS guide</button></div>
+    <div id="eatRec">
+      <div class="chips" id="recCats"></div>
+      <div id="recList"></div>
+      <p class="src">Nutrition per serving is approximate, worked out from typical values for each ingredient. Your exact brands will differ a little.</p>
+    </div>
+    <div id="eatGuide" class="hide guide">
+      <div class="card"><h2>Build your plate in thirds</h2>
+        <div class="bigplate"><svg viewBox="0 0 40 40" id="guidePlate" aria-hidden="true"></svg>
+        <div class="lg"><span><i style="background:var(--pv)"></i>Fruit &amp; veg (fibre)</span><span><i style="background:var(--pc)"></i>Starchy carbs – wholegrain where you can</span><span><i style="background:var(--pp)"></i>Protein – beans, fish, eggs, meat, dairy</span></div></div>
+        <p>The NHS Eatwell Guide says fruit and veg should make up just over a third of what you eat, and starchy foods just over a third, with protein, dairy and a little oil making up the rest. Tick the three parts on each meal on the Today screen to see how balanced your plates are.</p>
+        <p>You don't need this balance at every meal – aim for it across a day or even a week.</p>
+        <a href="https://www.nhs.uk/live-well/eat-well/food-guidelines-and-food-labels/the-eatwell-guide/">The Eatwell Guide – NHS</a></div>
+      <div class="card"><h2>5 A Day</h2>
+        <ul><li>One portion is 80g of fresh, frozen or tinned fruit or veg – e.g. 1 apple or banana, 3 heaped tablespoons of cooked veg, or 7 cherry tomatoes.</li>
+        <li>30g of dried fruit counts as 1 – best at mealtimes for your teeth.</li>
+        <li>Beans and pulses count once a day, however much you have.</li>
+        <li>Juice and smoothies: no more than 150ml a day in total, and they count once.</li>
+        <li>Potatoes don't count – they're a starchy food.</li></ul>
+        <a href="https://www.nhs.uk/live-well/eat-well/5-a-day/portion-sizes/">5 A Day portion sizes – NHS</a></div>
+      <div class="card"><h2>Starchy foods &amp; fibre</h2>
+        <ul><li>Base meals on potatoes, bread, rice or pasta, choosing wholegrain or higher-fibre versions.</li>
+        <li>Leave the skins on potatoes for extra fibre.</li>
+        <li>Adults should aim for 30g of fibre a day – oats, wholegrains, beans, lentils, fruit and veg all help.</li></ul></div>
+      <div class="card"><h2>Protein</h2>
+        <ul><li>Mix it up: beans, pulses, fish, eggs, meat and dairy.</li>
+        <li>Aim for 2 portions of fish a week, one of them oily, like salmon or mackerel.</li>
+        <li>Choose lean cuts and eat less red and processed meat.</li>
+        <li>If you train, spread protein across your meals instead of saving it for one.</li></ul></div>
+      <div class="card"><h2>Keep these low</h2>
+        <ul><li><b>Saturated fat:</b> no more than 30g a day for men and 20g for women.</li>
+        <li><b>Salt:</b> no more than 6g a day (about a teaspoon).</li>
+        <li><b>Free sugars:</b> no more than 30g a day. These are sugars added to food, plus honey, syrups and fruit juice. Labels don't separate them out, so check the ingredients.</li>
+        <li>On labels, more than 22.5g of sugar per 100g is high, and 5g or less is low.</li></ul>
+        <a href="https://www.nhs.uk/live-well/eat-well/how-to-eat-a-balanced-diet/eight-tips-for-healthy-eating/">8 tips for healthy eating – NHS</a></div>
+      <div class="card"><h2>Drinks</h2>
+        <p>The NHS general guide is 6 to 8 glasses of fluid a day. Your personal target on the Targets tab is based on your weight instead: 30–35ml per kg, and at least 2 litres for men or 1.6 litres for women.</p>
+        <p>Water, lower-fat milk and sugar-free drinks, including tea and coffee, all count. Drink more on training days or when it's hot. Pale straw-coloured pee is a good sign you're drinking enough.</p>
+        <a href="https://www.nhs.uk/live-well/eat-well/water-drinks-nutrition/">Water, drinks and hydration – NHS</a></div>
+      <div class="card"><h2>A healthy relationship with tracking</h2>
+        <p>Tracking is a tool for learning what's in your food. It isn't a test you can fail.</p>
+        <ul><li>Look at weekly averages instead of any single day.</li>
+        <li>Take days off – birthdays, meals out and holidays don't need logging.</li>
+        <li>Turn off calorie numbers (on the Targets tab) if they start to take over.</li></ul>
+        <p>If tracking starts to make you anxious, or food feels like it's controlling you, take a break and talk to someone. Beat, the UK eating disorder charity, runs a free helpline: <b>0808 801 0677</b>.</p>
+        <a href="https://www.beateatingdisorders.org.uk/">Beat – eating disorder support</a></div>
+      <p class="src">Based on NHS and UK government healthy eating guidance. This isn't a substitute for advice from a dietitian or GP, especially if you have a medical condition.</p>
+    </div>
+  </section>
+
+  <section id="vHist" class="hide"></section>
+
+  <section id="vTgt" class="hide">
+    <div class="card">
+      <h2>Your daily targets <small id="tgtGoal"></small></h2>
+      <div class="tgt" id="tgtBox"></div>
+      <p class="msg" id="tgtNote"></p>
+    </div>
+
+    <div class="card">
+      <h2>Your details</h2>
+      <div class="grid2">
+        <div><label for="pSex">Sex</label><select id="pSex"><option value="m">Male</option><option value="f">Female</option></select></div>
+        <div><label for="pAge">Age</label><input id="pAge" type="number" inputmode="numeric"></div>
+      </div>
+      <label>Height</label>
+      <div class="grid3">
+        <input id="pFt" type="number" inputmode="numeric" placeholder="ft" aria-label="Feet">
+        <input id="pIn" type="number" inputmode="decimal" placeholder="in" aria-label="Inches">
+        <input id="pCm" type="number" inputmode="decimal" placeholder="cm" aria-label="Centimetres">
+      </div>
+      <label for="pKg">Weight (kg)</label>
+      <div class="srow"><input id="pKg" type="number" inputmode="decimal" step="0.1">
+        <button class="btn ghost" id="weighIn">Log weigh-in</button></div>
+      <label for="pAct">Activity</label>
+      <select id="pAct">
+        <option value="1.375">Light – desk job, 1–3 sessions a week</option>
+        <option value="1.55">Moderate – on your feet at work, 3–4 sessions a week</option>
+        <option value="1.725">High – active job, 5+ sessions a week</option>
+      </select>
+      <label for="pGoal">Goal</label>
+      <select id="pGoal">
+        <option value="0.1">Lean bulk – about 10% surplus</option>
+        <option value="0.15">Bulk – about 15% surplus</option>
+        <option value="0">Maintain</option>
+        <option value="-0.2">Cut – about 20% deficit</option>
+      </select>
+      <label for="pPro">Protein</label>
+      <select id="pPro">
+        <option value="1.6">1.6 g/kg – minimum effective</option>
+        <option value="1.8">1.8 g/kg</option>
+        <option value="2">2.0 g/kg – recommended</option>
+        <option value="2.2">2.2 g/kg – upper end</option>
+      </select>
+      <p class="msg">Targets update as soon as you change anything. Past days stay scored against the targets you had at the time.</p>
+    </div>
+
+    <div class="card"><h2>Weigh-ins <small id="wTrend"></small></h2><div class="wlist" id="wList"></div></div>
+
+    <div class="card"><h2>How these are worked out</h2>
+      <p class="msg">Calories: Mifflin-St Jeor resting rate × activity, then the goal surplus or deficit.<br>
+      Protein: your chosen g/kg. Benefit levels off around 1.6 g/kg; 1.6–2.2 g/kg is the usual range for building muscle.<br>
+      Fat: 1 g/kg (common range 0.5–1.5 g/kg).<br>
+      Carbs: the rest of your calories. For training you want at least 3–5 g/kg.<br>
+      Fibre: 30g a day, the UK adult guideline.<br>
+      Water: 30–35ml per kg of body weight, a rule dietitians commonly use. It never goes below the European Food Safety Authority (EFSA) figure for drinks: 2 litres for men and 1.6 litres for women. Height isn't used because it doesn't add anything once weight is known. Drink more on training days and in hot weather.</p>
+    </div>
+
+    <div class="card"><h2>Healthy mindset</h2>
+      <div class="switch"><span>Show calorie and gram numbers<br><small class="msg">Turn off to track by plate balance and bars only</small></span><input type="checkbox" id="numsT" aria-label="Show numbers"></div>
+      <p class="msg">Your weekly average matters more than any single day. If tracking ever starts to feel stressful, take a break. Beat's free helpline is 0808 801 0677.</p>
+    </div>
+
+    <div class="card" id="appearance"><h2>Appearance</h2>
+      <label>Palette</label>
+      <div class="pal" id="pal"></div>
+      <label>Your own colours</label>
+      <div class="pick"><input type="color" id="cBrand" aria-label="Main colour"><span>Main colour<br><small class="msg">Header and highlights</small></span></div>
+      <div class="pick"><input type="color" id="cAcc" aria-label="Accent colour"><span>Accent colour<br><small class="msg">Buttons and progress bars</small></span></div>
+      <div class="pick"><input type="color" id="cBg" aria-label="Background colour"><span>Background colour<br><small class="msg">Used when mode is Custom</small></span></div>
+      <label>Mode</label>
+      <div class="seg" id="mode"><button data-mode="auto">Auto</button><button data-mode="light">Light</button><button data-mode="dark">Dark</button><button data-mode="custom">Custom</button></div>
+      <p class="msg">Auto follows your phone's light/dark setting. Custom uses your background colour and picks readable text automatically.</p>
+      <button class="add" id="resetTheme">Reset to default</button>
+    </div>
+
+    <div class="card"><h2>Backup</h2>
+      <p class="msg">Everything is stored on this phone only. Copy a backup now and then, and paste it back to restore.</p>
+      <div class="srow"><button class="btn ghost" id="exp">Copy backup</button><button class="btn ghost" id="imp">Restore</button></div>
+      <textarea id="bk" class="hide" placeholder="Paste backup here, then press Restore again"></textarea>
+    </div>
+  </section>
+</main>
+
+<nav>
+  <button data-v="vDay" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Today</button>
+  <button data-v="vAdd"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>Add</button>
+  <button data-v="vEat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18a9 9 0 0 1-18 0z"/><path d="M8 8c0-2 2-2 2-4M13 8c0-2 2-2 2-4"/></svg>Eat well</button>
+  <button data-v="vHist"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>History</button>
+  <button data-v="vTgt"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>Targets</button>
+</nav>
+
+<div class="onb hide" id="onb">
+  <div class="top"><img src="icon-192.png" alt="" width="64" height="64" style="border-radius:15px;margin-bottom:14px;box-shadow:0 4px 14px #0004"><h2>Welcome to Healthy Tracking</h2><p>Enter a few details and the app will work out your daily calories, protein, carbs, fibre and fat.</p></div>
+  <form id="onbForm" novalidate>
+    <div class="card">
+      <div class="grid2">
+        <div><label for="oSex">Sex</label><select id="oSex"><option value="">Choose</option><option value="m">Male</option><option value="f">Female</option></select></div>
+        <div><label for="oAge">Age</label><input id="oAge" type="number" inputmode="numeric" placeholder="e.g. 30"></div>
+      </div>
+      <label>Height</label>
+      <div class="grid3">
+        <input id="oFt" type="number" inputmode="numeric" placeholder="ft" aria-label="Feet">
+        <input id="oIn" type="number" inputmode="decimal" placeholder="in" aria-label="Inches">
+        <input id="oCm" type="number" inputmode="decimal" placeholder="or cm" aria-label="Centimetres">
+      </div>
+      <label for="oKg">Weight (kg)</label><input id="oKg" type="number" inputmode="decimal" step="0.1" placeholder="e.g. 75">
+      <label for="oAct">Activity</label>
+      <select id="oAct">
+        <option value="1.375">Light – desk job, 1–3 sessions a week</option>
+        <option value="1.55" selected>Moderate – on your feet at work, 3–4 sessions a week</option>
+        <option value="1.725">High – active job, 5+ sessions a week</option>
+      </select>
+      <label for="oGoal">Goal</label>
+      <select id="oGoal">
+        <option value="0.1" selected>Build muscle – lean bulk</option>
+        <option value="0.15">Build muscle – bulk</option>
+        <option value="0">Maintain</option>
+        <option value="-0.2">Lose fat – cut</option>
+      </select>
+      <div class="err" id="oErr" role="alert"></div>
+      <button class="btn" type="submit" style="width:100%">Work out my targets</button>
+    </div>
+    <button class="add" type="button" id="oRestore" style="width:100%">Moving from another phone? Restore a backup</button>
+  </form>
+  <div class="done hide" id="onbDone">
+    <div class="card"><h2>Your daily targets</h2><div class="tgt" id="oTgt"></div>
+      <p class="msg">You can change your details any time on the Targets tab. Log your weight there once a week and the targets update with you.</p>
+      <button class="btn" id="oStart" style="width:100%">Start logging</button></div>
+  </div>
+</div>
+
+<div class="sheet" id="sheet"><div><span class="grab"></span><div id="sheetBody"></div></div></div>
+<div class="toast" id="toast" role="status"><span id="toastTxt"></span><button id="undo">Undo</button></div>
+
+<script>
+{
+const MEALS=['Breakfast','Lunch','Dinner','Snacks'];
+const STORES=[['','All UK'],['aldi','Aldi'],['tesco','Tesco'],['lidl','Lidl'],['asda','Asda'],['marks-and-spencer','M&S']];
+const NUT=[['k','Calories','kcal'],['p','Protein','g'],['c','Carbs','g'],['fb','Fibre','g'],['f','Fat','g']];
+const OFF='https://world.openfoodfacts.org';
+const FIELDS='code,product_name,product_name_en,brands,stores,quantity,serving_size,serving_quantity,nutriments';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const r0=n=>Math.round(n||0), r1=n=>Math.round((n||0)*10)/10;
+const key=d=>{const x=new Date(d);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')};
+const fmtD=k=>new Date(k+'T12:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+
+const FRESH=(()=>{try{return !localStorage.getItem('fuellog')}catch(e){return true}})();
+const RECIPES=[{"id":"b1","cat":"Breakfast","name":"Protein overnight oats","serves":1,"mins":5,"ing":["50g oats","150ml semi-skimmed milk","100g 0% Greek-style yogurt","80g frozen berries","1 tbsp chia seeds"],"method":"Stir the oats, milk, yogurt and chia together in a jar. Top with berries, cover and leave in the fridge overnight. Eat cold or warm for a minute in the microwave.","plate":"pcv","note":"","sw":390,"fv":1,"per100":{"k":103.49,"p":6.0,"c":12.31,"fb":2.85,"f":2.63,"sf":0.73,"su":4.33,"sa":0.06},"ps":{"k":403.6,"p":23.4,"c":48.0,"fb":11.1,"f":10.2,"sf":2.8,"su":16.9,"sa":0.2}},{"id":"b2","cat":"Breakfast","name":"Spinach & tomato egg scramble on toast","serves":1,"mins":10,"ing":["3 large eggs","Splash of milk","2 big handfuls spinach","7 cherry tomatoes","2 slices wholemeal bread"],"method":"Wilt the spinach in a non-stick pan. Add the eggs whisked with the milk and stir gently over a low heat until just set. Serve on toast with halved tomatoes.","plate":"pcv","note":"","sw":440,"fv":2,"per100":{"k":111.86,"p":7.83,"c":8.58,"fb":1.89,"f":4.7,"sf":1.26,"su":1.47,"sa":0.35},"ps":{"k":492.2,"p":34.4,"c":37.7,"fb":8.3,"f":20.7,"sf":5.6,"su":6.5,"sa":1.5}},{"id":"b3","cat":"Breakfast","name":"Smoked salmon & cottage cheese toast","serves":1,"mins":5,"ing":["2 slices wholemeal bread","100g low-fat cottage cheese","50g smoked salmon","Few slices cucumber","4 cherry tomatoes"],"method":"Toast the bread, spread with cottage cheese and top with salmon, cucumber, tomato, black pepper and a squeeze of lemon.","plate":"pcv","note":"Smoked salmon is salty, so keep this to once or twice a week.","sw":310,"fv":1,"per100":{"k":119.03,"p":10.35,"c":12.03,"fb":2.04,"f":2.7,"sf":0.71,"su":2.27,"sa":0.91},"ps":{"k":369.0,"p":32.1,"c":37.3,"fb":6.3,"f":8.4,"sf":2.2,"su":7.0,"sa":2.8}},{"id":"b4","cat":"Breakfast","name":"Banana protein porridge","serves":1,"mins":5,"ing":["60g oats","250ml semi-skimmed milk","1 scoop whey protein","1 banana"],"method":"Cook the oats in the milk for 3\u20134 minutes, stirring. Take off the heat, stir in the protein powder (add a splash of water if thick) and top with sliced banana.","plate":"pcv","note":"","sw":435,"fv":1,"per100":{"k":124.0,"p":8.17,"c":16.32,"fb":1.56,"f":2.55,"sf":1.03,"su":7.15,"sa":0.09},"ps":{"k":539.4,"p":35.6,"c":71.0,"fb":6.8,"f":11.1,"sf":4.5,"su":31.1,"sa":0.4}},{"id":"s1","cat":"Snacks","name":"Greek yogurt berry pot","serves":1,"mins":2,"ing":["170g 0% Greek-style yogurt","80g berries","Small handful unsalted nuts"],"method":"Spoon the yogurt into a bowl or tub, top with berries and chopped nuts.","plate":"pv","note":"","sw":265,"fv":1,"per100":{"k":85.25,"p":7.85,"c":5.29,"fb":1.6,"f":3.28,"sf":0.4,"su":4.65,"sa":0.06},"ps":{"k":225.9,"p":20.8,"c":14.0,"fb":4.2,"f":8.7,"sf":1.1,"su":12.3,"sa":0.2}},{"id":"s2","cat":"Snacks","name":"Edamame & hummus snack box","serves":1,"mins":5,"ing":["80g edamame (defrosted)","2 tbsp reduced-fat hummus","5cm cucumber, in sticks","\u00bd pepper, sliced"],"method":"Pack the veg sticks and edamame with a pot of hummus for dipping.","plate":"pv","note":"","sw":280,"fv":3,"per100":{"k":80.57,"p":4.89,"c":4.86,"fb":2.94,"f":3.83,"sf":0.44,"su":2.36,"sa":0.13},"ps":{"k":225.6,"p":13.7,"c":13.6,"fb":8.2,"f":10.7,"sf":1.2,"su":6.6,"sa":0.4}},{"id":"s3","cat":"Snacks","name":"Apple, peanut butter & cottage cheese","serves":1,"mins":2,"ing":["1 apple, sliced","1 tbsp peanut butter","100g low-fat cottage cheese"],"method":"Dip apple slices into the peanut butter and cottage cheese. Add cinnamon if you like.","plate":"pv","note":"","sw":235,"fv":1,"per100":{"k":95.74,"p":6.91,"c":8.34,"fb":1.4,"f":3.88,"sf":0.94,"su":6.77,"sa":0.32},"ps":{"k":225.0,"p":16.2,"c":19.6,"fb":3.3,"f":9.1,"sf":2.2,"su":15.9,"sa":0.8}},{"id":"s4","cat":"Snacks","name":"Tuna & tomato rice cakes","serves":1,"mins":5,"ing":["2 rice cakes","1 small tin tuna, drained","1 tbsp Greek-style yogurt","7 cherry tomatoes"],"method":"Mix the tuna with yogurt, pepper and lemon. Pile onto rice cakes and top with chopped tomatoes.","plate":"pcv","note":"","sw":230,"fv":1,"per100":{"k":94.57,"p":13.18,"c":8.47,"fb":0.68,"f":0.79,"sf":0.2,"su":1.42,"sa":0.4},"ps":{"k":217.5,"p":30.3,"c":19.5,"fb":1.6,"f":1.8,"sf":0.4,"su":3.3,"sa":0.9}},{"id":"l1","cat":"Lunch","name":"Chicken, hummus & salad wrap","serves":1,"mins":10,"ing":["1 wholemeal wrap","120g chicken breast, cooked and sliced","1\u00bd tbsp reduced-fat hummus","Handful salad leaves","Few strips pepper","Few slices cucumber"],"method":"Spread the wrap with hummus, add the chicken and salad, roll tightly and cut in half.","plate":"pcv","note":"","sw":352,"fv":2,"per100":{"k":113.24,"p":10.75,"c":10.25,"fb":2.1,"f":2.76,"sf":0.49,"su":1.68,"sa":0.3},"ps":{"k":398.6,"p":37.8,"c":36.1,"fb":7.4,"f":9.7,"sf":1.7,"su":5.9,"sa":1.1}},{"id":"l2","cat":"Lunch","name":"Tuna & chickpea salad bowl","serves":1,"mins":10,"ing":["1 tin tuna, drained","\u00bd tin chickpeas, drained","7 cherry tomatoes","Chunk of cucumber","Handful salad leaves","1 tsp olive oil","1 wholemeal pitta"],"method":"Toss everything except the pitta with the oil, lemon juice and black pepper. Serve with the warm pitta.","plate":"pcv","note":"","sw":465,"fv":3,"per100":{"k":103.72,"p":9.2,"c":10.5,"fb":2.51,"f":2.24,"sf":0.34,"su":1.19,"sa":0.32},"ps":{"k":482.3,"p":42.8,"c":48.8,"fb":11.7,"f":10.4,"sf":1.6,"su":5.5,"sa":1.5}},{"id":"l3","cat":"Lunch","name":"Red lentil & tomato soup","serves":4,"mins":35,"ing":["250g red lentils","2 tins chopped tomatoes","1 onion, chopped","2 carrots, chopped","2 tsp olive oil","Spoon of yogurt per bowl","1 slice wholemeal bread each"],"method":"Soften the onion and carrot in the oil. Add the lentils, tomatoes, 1 litre of water, a low-salt stock cube and cumin. Simmer 25 minutes, then blend. Serve with yogurt and bread. Freezes well.","plate":"pcv","note":"","sw":422,"fv":4,"per100":{"k":99.28,"p":5.93,"c":14.44,"fb":3.22,"f":1.21,"sf":0.17,"su":3.55,"sa":0.13},"ps":{"k":419.5,"p":25.1,"c":61.0,"fb":13.6,"f":5.1,"sf":0.7,"su":15.0,"sa":0.5}},{"id":"l4","cat":"Lunch","name":"Egg fried rice with peas & edamame","serves":1,"mins":10,"ing":["200g cooked brown rice (cold)","2 eggs","80g frozen peas","60g edamame","2 tsp reduced-salt soy sauce","1 tsp oil"],"method":"Stir-fry the peas and edamame in the oil for 2 minutes. Push aside, scramble the eggs, then add the rice and soy sauce and fry until piping hot.","plate":"pcv","note":"Cool cooked rice quickly and keep it in the fridge no more than a day before reheating.","sw":475,"fv":2,"per100":{"k":125.85,"p":6.97,"c":13.25,"fb":2.24,"f":4.92,"sf":1.05,"su":1.34,"sa":0.28},"ps":{"k":597.8,"p":33.1,"c":62.9,"fb":10.7,"f":23.4,"sf":5.0,"su":6.4,"sa":1.3}},{"id":"d1","cat":"Dinner","name":"Chicken & veg stir-fry with noodles","serves":1,"mins":15,"ing":["150g chicken breast, sliced","75g wholewheat noodles","Half a 400g bag stir-fry veg","1 tbsp reduced-salt soy sauce","1 tsp oil"],"method":"Cook the noodles. Stir-fry the chicken in the oil until cooked through, add the veg for 3 minutes, then toss in the noodles, soy sauce, garlic and ginger.","plate":"pcv","note":"","sw":445,"fv":2,"per100":{"k":119.82,"p":11.29,"c":12.92,"fb":2.32,"f":2.02,"sf":0.34,"su":1.96,"sa":0.4},"ps":{"k":533.2,"p":50.2,"c":57.5,"fb":10.3,"f":9.0,"sf":1.5,"su":8.7,"sa":1.8}},{"id":"d2","cat":"Dinner","name":"Turkey chilli with beans & rice","serves":4,"mins":40,"ing":["500g lean turkey mince","2 tins kidney beans, drained","2 tins chopped tomatoes","1 onion","2 peppers","2 tsp oil","150g cooked brown rice each"],"method":"Brown the mince in the oil, add onion and peppers and cook 5 minutes. Add chilli powder, cumin, the tomatoes and beans. Simmer 25 minutes. Serve with rice.","plate":"pcv","note":"Freezes well in portions.","sw":685,"fv":4,"per100":{"k":77.42,"p":6.31,"c":9.79,"fb":2.03,"f":1.15,"sf":0.22,"su":1.93,"sa":0.07},"ps":{"k":530.4,"p":43.2,"c":67.1,"fb":13.9,"f":7.8,"sf":1.5,"su":13.2,"sa":0.5}},{"id":"d3","cat":"Dinner","name":"Baked salmon, new potatoes & greens","serves":1,"mins":25,"ing":["1 salmon fillet","200g new potatoes, skins on","Few broccoli florets","80g peas","1 tsp olive oil"],"method":"Boil the potatoes for 15 minutes. Bake the salmon at 200\u00b0C for 12\u201315 minutes with lemon. Steam the broccoli and peas, and drizzle everything with the oil.","plate":"pcv","note":"Counts as your oily fish for the week.","sw":515,"fv":2,"per100":{"k":106.45,"p":7.44,"c":8.58,"fb":1.98,"f":4.64,"sf":0.82,"su":1.34,"sa":0.03},"ps":{"k":548.2,"p":38.3,"c":44.2,"fb":10.2,"f":23.9,"sf":4.2,"su":6.9,"sa":0.1}},{"id":"d4","cat":"Dinner","name":"Lean beef bolognese with wholewheat pasta","serves":4,"mins":40,"ing":["500g 5% fat beef mince","300g wholewheat pasta","2 tins chopped tomatoes","1 onion","1 large carrot, grated","200g mushrooms","2 tsp oil"],"method":"Brown the mince, add onion, carrot and mushrooms and cook 5 minutes. Add the tomatoes, garlic and herbs and simmer 25 minutes. Serve over the cooked pasta.","plate":"pcv","note":"","sw":528,"fv":4,"per100":{"k":99.47,"p":7.68,"c":11.58,"fb":2.1,"f":2.17,"sf":0.65,"su":2.51,"sa":0.07},"ps":{"k":524.7,"p":40.5,"c":61.1,"fb":11.1,"f":11.5,"sf":3.4,"su":13.2,"sa":0.4}},{"id":"k1","cat":"Drinks","name":"Berry protein smoothie","serves":1,"mins":5,"ing":["250ml semi-skimmed milk","100g frozen berries","\u00bd banana","1 scoop whey protein"],"method":"Blend everything until smooth.","plate":"pv","note":"Blended fruit counts as 1 of your 5 A Day at most, however much is in it.","sw":435,"fv":1,"per100":{"k":74.02,"p":6.77,"c":7.95,"fb":1.11,"f":1.49,"sf":0.82,"su":7.06,"sa":0.09},"ps":{"k":322.0,"p":29.5,"c":34.6,"fb":4.8,"f":6.5,"sf":3.6,"su":30.7,"sa":0.4}},{"id":"k2","cat":"Drinks","name":"Mocha protein shake","serves":1,"mins":3,"ing":["300ml skimmed milk","1 scoop chocolate whey","1 tsp cocoa","1 frozen banana"],"method":"Blend with a shot of cold espresso and a handful of ice.","plate":"pv","note":"Good after training.","sw":430,"fv":1,"per100":{"k":73.02,"p":7.31,"c":8.98,"fb":0.67,"f":0.73,"sf":0.42,"su":7.8,"sa":0.1},"ps":{"k":314.0,"p":31.4,"c":38.6,"fb":2.9,"f":3.1,"sf":1.8,"su":33.5,"sa":0.4}},{"id":"k3","cat":"Drinks","name":"Mango kefir lassi","serves":1,"mins":3,"ing":["200ml kefir","80g frozen mango","2 tbsp Greek-style yogurt"],"method":"Blend with a pinch of cardamom and a few ice cubes.","plate":"pv","note":"","sw":330,"fv":1,"per100":{"k":56.52,"p":3.77,"c":6.42,"fb":0.48,"f":1.59,"sf":0.98,"su":6.42,"sa":0.08},"ps":{"k":186.5,"p":12.4,"c":21.2,"fb":1.6,"f":5.3,"sf":3.2,"su":21.2,"sa":0.2}},{"id":"k4","cat":"Drinks","name":"High-protein hot chocolate","serves":1,"mins":5,"ing":["300ml semi-skimmed milk","2 tsp cocoa","Small scoop vanilla whey"],"method":"Heat the milk until steaming (not boiling). Whisk in the cocoa, then the protein powder off the heat. Sweeten with a little sweetener if you like.","plate":"p","note":"","sw":330,"fv":0,"per100":{"k":80.0,"p":8.42,"c":5.21,"fb":0.91,"f":2.64,"sf":1.58,"su":4.76,"sa":0.12},"ps":{"k":264.0,"p":27.8,"c":17.2,"fb":3.0,"f":8.7,"sf":5.2,"su":15.7,"sa":0.4}},{"id":"t1","cat":"Treats","name":"Chocolate protein mug cake","serves":1,"mins":5,"ing":["30g oats, blitzed","Small scoop whey","1 heaped tsp cocoa","1 egg","2 tbsp milk","Spoon of yogurt to serve"],"method":"Mix everything except the yogurt with \u00bd tsp baking powder in a large mug. Microwave 60\u201390 seconds until risen. Top with yogurt.","plate":"pc","note":"","sw":198,"fv":0,"per100":{"k":175.71,"p":16.94,"c":12.23,"fb":2.58,"f":5.99,"sf":2.07,"su":2.56,"sa":0.2},"ps":{"k":347.9,"p":33.5,"c":24.2,"fb":5.1,"f":11.9,"sf":4.1,"su":5.1,"sa":0.4}},{"id":"t2","cat":"Treats","name":"Frozen yogurt berry bark","serves":4,"mins":10,"ing":["400g 0% Greek-style yogurt","150g berries","30g dark chocolate, melted","1 tbsp honey"],"method":"Mix the honey into the yogurt and spread on a lined tray. Scatter with berries, drizzle with chocolate and freeze for 2 hours. Snap into pieces.","plate":"pv","note":"","sw":149,"fv":0,"per100":{"k":87.23,"p":7.39,"c":8.17,"fb":1.56,"f":2.38,"sf":1.38,"su":7.66,"sa":0.07},"ps":{"k":129.8,"p":11.0,"c":12.1,"fb":2.3,"f":3.5,"sf":2.0,"su":11.4,"sa":0.1}},{"id":"t3","cat":"Treats","name":"Peanut butter banana nice cream","serves":1,"mins":5,"ing":["1 large frozen banana","2 tsp peanut butter","1 tsp cocoa","Splash of milk","Half scoop whey"],"method":"Blend the frozen banana with the rest until thick and creamy, like soft-serve. Eat straight away.","plate":"pv","note":"","sw":180,"fv":1,"per100":{"k":147.22,"p":9.59,"c":16.52,"fb":2.1,"f":4.36,"sf":1.31,"su":12.99,"sa":0.12},"ps":{"k":265.0,"p":17.3,"c":29.7,"fb":3.8,"f":7.9,"sf":2.4,"su":23.4,"sa":0.2}},{"id":"t4","cat":"Treats","name":"Chocolate strawberries with yogurt dip","serves":1,"mins":10,"ing":["14 strawberries","20g dark chocolate","100g Greek-style yogurt"],"method":"Melt the chocolate, half-dip the strawberries and leave to set. Serve with the yogurt (add vanilla) for dipping.","plate":"pv","note":"","sw":280,"fv":2,"per100":{"k":80.07,"p":4.54,"c":7.07,"fb":1.93,"f":3.31,"sf":1.89,"su":6.71,"sa":0.04},"ps":{"k":224.2,"p":12.7,"c":19.8,"fb":5.4,"f":9.3,"sf":5.3,"su":18.8,"sa":0.1}}];
+const RCATS=['Breakfast','Snacks','Lunch','Dinner','Drinks','Treats'];
+let S={profile:{sex:'m',age:25,cm:173,kg:70,act:1.55,goal:0.10,pro:2},weights:{},tByDate:{},log:{},foods:{},fav:[],habits:{},plates:{},offDays:{},prefs:{nums:true}};
+try{const s=localStorage.getItem('fuellog');if(s){const d=JSON.parse(s);S=Object.assign(S,d);delete S.targets}}catch(e){}
+const save=()=>{try{localStorage.setItem('fuellog',JSON.stringify(S))}catch(e){}};
+
+/* ---------- target maths ---------- */
+function calc(P){
+  const bmr=10*P.kg+6.25*P.cm-5*P.age+(P.sex==='m'?5:-161);
+  const tdee=bmr*P.act;
+  const k=Math.round(tdee*(1+P.goal)/10)*10;
+  const p=Math.round(P.kg*P.pro), f=Math.round(P.kg*1);
+  const c=Math.max(0,Math.round((k-p*4-f*9)/4));
+  const wMin=P.sex==='f'?1600:2000,wLo=Math.max(wMin,Math.round(P.kg*30/50)*50),wHi=Math.max(wLo,Math.round(P.kg*35/50)*50);
+  const wGl=Math.round((wLo+wHi)/2/250);
+  return{k,p,c,fb:30,f,bmr:Math.round(bmr),tdee:Math.round(tdee),wLo,wHi,wGl,wMin};
+}
+function snapshot(){const t=calc(S.profile);S.tByDate[key(new Date())]=t;save();return t}
+function targetsFor(dk){
+  const ks=Object.keys(S.tByDate).sort();let t=null;
+  for(const k of ks){if(k<=dk)t=S.tByDate[k];else break}
+  return t||(ks.length?S.tByDate[ks[0]]:calc(S.profile));
+}
+
+let day=new Date();day.setHours(12,0,0,0);
+let meal='Breakfast',store='',lastResults=[],range=30;
+
+/* ---------- feel ---------- */
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function countTo(el,to){const from=+el.dataset.v||0;el.dataset.v=to;if(reduce||from===to){el.textContent=to;return}
+  const t0=performance.now(),d=600;const step=now=>{const p=Math.min(1,(now-t0)/d),e=1-(1-p)**3;el.textContent=Math.round(from+(to-from)*e);if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)}
+const buzz=()=>{try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}};
+let undoFn=null,toastT=0;
+function toast(msg,undo){$('toastTxt').textContent=msg;undoFn=undo||null;$('undo').classList.toggle('hide',!undo);
+  $('toast').classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>$('toast').classList.remove('show'),4000)}
+
+/* ---------- food helpers ---------- */
+function fromOFF(p){
+  const n=p.nutriments||{};
+  let k=n['energy-kcal_100g'];
+  if(k==null&&n['energy-kj_100g']!=null)k=n['energy-kj_100g']/4.184;
+  if(k==null&&n.energy_100g!=null)k=n.energy_100g/4.184;
+  if(k==null)return null;
+  return{id:'off:'+p.code,name:(p.product_name_en||p.product_name||'Unnamed product').trim(),
+    brand:(p.brands||'').split(',')[0].trim(),store:(p.stores||'').split(',').slice(0,2).join(', ').trim(),
+    k:+k,p:+(n.proteins_100g||0),c:+(n.carbohydrates_100g||0),fb:+(n.fiber_100g||0),f:+(n.fat_100g||0),
+    sf:n['saturated-fat_100g']!=null?+n['saturated-fat_100g']:null,su:n.sugars_100g!=null?+n.sugars_100g:null,sa:n.salt_100g!=null?+n.salt_100g:null,
+    serving:+(p.serving_quantity||0)||null,servingLbl:p.serving_size||'',qty:p.quantity||''};
+}
+const dayLog=()=>S.log[key(day)]||(S.log[key(day)]=[]);
+const totals=list=>list.reduce((a,e)=>{const f=S.foods[e.id];if(!f)return a;const m=e.g/100;
+  for(const n of['k','p','c','fb','f','sf','su','sa'])a[n]+=(f[n]||0)*m;return a},{k:0,p:0,c:0,fb:0,f:0,sf:0,su:0,sa:0});
+const dk0=()=>key(day);
+const hab=()=>S.habits[dk0()]||(S.habits[dk0()]={fv:0,w:0});
+const plates=()=>S.plates[dk0()]||(S.plates[dk0()]={});
+function plateSvg(tags,opt={}){
+  const seg=(a0,a1,col)=>{const r=18,c=20,p=a=>[c+r*Math.cos(a),c+r*Math.sin(a)];const[x0,y0]=p(a0),[x1,y1]=p(a1);
+    return `<path d="M${c} ${c}L${x0.toFixed(2)} ${y0.toFixed(2)}A${r} ${r} 0 0 1 ${x1.toFixed(2)} ${y1.toFixed(2)}Z" fill="${col}" stroke="var(--card)" stroke-width="1.5"/>`};
+  const T=Math.PI*2/3,o=-Math.PI/2,on=k=>opt.all||tags.includes(k);
+  return `<circle cx="20" cy="20" r="19.5" fill="none" stroke="var(--line)"/>`+seg(o,o+T,on('v')?'var(--pv)':'var(--line)')+seg(o+T,o+2*T,on('c')?'var(--pc)':'var(--line)')+seg(o+2*T,o+3*T,on('p')?'var(--pp)':'var(--line)');
+}
+const pct=(v,t)=>t?Math.round(v/t*100):0;
+const applyNums=()=>document.body.classList.toggle('nonum',S.prefs?.nums===false);
+const cls=p=>p<70?'lo':p<90?'mid':p>120?'hi':'';
+
+/* ---------- views ---------- */
+function show(v){
+  for(const s of ['vDay','vAdd','vEat','vHist','vTgt'])$(s).classList.toggle('hide',s!==v);
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  if(v==='vAdd'){$('addMeal').textContent='to '+meal;renderRecent()}
+  if(v==='vHist')renderHist();
+  if(v==='vEat')renderEat();
+  if(v==='vTgt'){fillProfile();renderTargets()}
+  window.scrollTo(0,0);
+}
+
+function renderTop(){
+  const dk=key(day),t=totals(dayLog()),T=targetsFor(dk);
+  $('dateLbl').textContent=dk===key(new Date())?'Today':fmtD(dk);
+  countTo($('kcal'),r0(t.k));
+  $('kcalOf').textContent=`of ${T.k} kcal`;
+  const frac=t.k/T.k,rp=$('ringP');
+  rp.style.strokeDashoffset=326.7*(1-Math.min(1,frac));rp.classList.toggle('over',frac>1.1);
+  const left=r0(T.k-t.k),nums=S.prefs?.nums!==false;
+  $('kcalLeft').textContent=S.offDays[dk]?'Day off from tracking':!t.k?'Nothing logged yet':
+    !nums?'Balance across the week matters more than any one day':
+    left>0?`${left} kcal to go · ${Math.max(0,r0(T.p-t.p))}g protein left`:`${-left} kcal above today's target – the weekly average matters more`;
+  for(const id of['p','c','fb','f']){
+    $(id+'Txt').textContent=`${r0(t[id])}/${T[id]}g`;$(id+'Bar').style.width=Math.min(100,pct(t[id],T[id]))+'%';
+  }
+}
+
+function renderDay(){
+  renderTop();
+  const dk=dk0();
+  if(S.offDays[dk]){
+    $('vDay').innerHTML=`<div class="card calm"><h2>Day off from tracking</h2><p>Enjoy your food without counting today. One day doesn't change your progress – your weekly pattern does.</p>
+      <button class="btn ghost" id="offUndo">Track today after all</button></div>`;return}
+  const list=dayLog(),H=hab(),P=plates(),T=targetsFor(dk),W=T.wGl?T:calc(S.profile);
+  let h=`<div class="card"><h2>Healthy habits</h2>
+    <div class="hab"><div class="lab"><b>5 A Day</b><small>80g of fruit or veg = 1 portion</small></div>
+      <div class="step"><button data-hab="fv:-1" aria-label="One less portion">−</button><b>${H.fv}</b><button data-hab="fv:1" aria-label="One more portion">+</button></div>
+      <div class="dots">${[1,2,3,4,5].map(i=>`<i class="${H.fv>=i?'on':''}"></i>`).join('')}</div></div>
+    <div class="hab"><div class="lab"><b>Drinks</b><small>Aim for about ${W.wGl} glasses (${r1(W.wGl*.25)} litres) · 250ml each</small></div>
+      <div class="step"><button data-hab="w:-1" aria-label="One less glass">−</button><b>${H.w}</b><button data-hab="w:1" aria-label="One more glass">+</button></div>
+      <div class="dots w">${Array.from({length:W.wGl},(_,i)=>`<i class="${H.w>i?'on':''}"></i>`).join('')}</div></div></div>`;
+  for(const m of MEALS){
+    const items=list.map((e,i)=>({e,i})).filter(x=>x.e.meal===m);
+    const t=totals(items.map(x=>x.e)),tags=P[m]||[];
+    h+=`<div class="card"><h2>${m} ${items.length?`<span class="pill">${r0(t.k)} kcal · ${r0(t.p)}g P</span>`:''}</h2>
+      <div class="plate"><svg viewBox="0 0 40 40" aria-hidden="true">${plateSvg(tags)}</svg>
+      ${[['p','Protein'],['c','Carbs'],['v','Fruit & veg']].map(([k,l])=>`<button class="ptag ${k} ${tags.includes(k)?'on':''}" data-plate="${m}:${k}" aria-pressed="${tags.includes(k)}">${l}</button>`).join('')}</div>
+      ${items.length?'':'<div class="empty">Nothing yet</div>'}`;
+    for(const{e,i}of items){const f=S.foods[e.id];if(!f)continue;const mm=e.g/100;
+      h+=`<div class="item"><div class="nm">${esc(f.name)}<div><span class="num">${esc(e.g)}g · </span>${f.brand?esc(f.brand):''}<span class="num"> · ${r0(f.p*mm)}g P · ${r0(f.c*mm)}g C · ${r1((f.fb||0)*mm)}g fibre</span></div></div>
+      <span class="kc">${r0(f.k*mm)}</span><button class="x" data-del="${i}" aria-label="Remove">×</button></div>`}
+    h+=`<button class="add" data-meal="${m}">+ Add to ${m.toLowerCase()}</button></div>`;
+  }
+  if(list.length){const t=totals(list),sfMax=S.profile.sex==='f'?20:30;
+    const row=(l,v,mx,u)=>{const p=pct(v,mx);return `<div class="m"><span>${l}</span><div class="tr"><i class="${p>100?'hi':''}" style="width:${Math.min(100,p)}%"></i></div><span>${r1(v)}${u} / ${mx}${u}</span></div>`};
+    h+=`<div class="card lim num"><h2>NHS limits <small>no more than</small></h2>
+      ${row('Sat. fat',t.sf,sfMax,'g')}${row('Salt',t.sa,6,'g')}${row('Sugars',t.su,90,'g')}
+      <p class="msg">Sugars here include those in fruit and milk (90g is the label reference intake). Aim to keep added and free sugars under 30g. Some products don't list these values, so totals can read low.</p></div>`}
+  h+=`<div class="card"><button class="btn ghost" id="copyY" style="width:100%">Copy the previous day's food into this day</button>
+    <button class="add" id="offOn" style="width:100%;margin-top:6px">Take this day off tracking</button></div>`;
+  $('vDay').innerHTML=h;
+}
+
+function foodRow(f,i,src,star){
+  const per=f.serving?` · ${r0(f.k*f.serving/100)} kcal per ${esc(f.servingLbl||f.serving+'g')}`:'';
+  return `<div class="res"><div class="nm">${star?'★ ':''}${esc(f.name)}<div>${[f.brand,f.qty].filter(Boolean).map(esc).join(' · ')}</div>
+  <div>Per 100g: ${r0(f.k)} kcal · ${r1(f.p)}g P · ${r1(f.c)}g C · ${r1(f.fb)}g fibre · ${r1(f.f)}g F${per}</div></div>
+  <button class="btn sm" data-pick="${i}" data-src="${src}">Add</button></div>`;
+}
+
+function renderResults(msg){
+  if(msg==='…'){$('results').innerHTML='<div class="sk"></div><div class="sk"></div><div class="sk"></div>';return}
+  $('results').innerHTML=msg?`<div class="msg">${esc(msg)}</div>`:
+    (lastResults.length?lastResults.map((f,i)=>foodRow(f,i,'r')).join(''):'<div class="msg">No results with calorie data. Try simpler words, another shop, or a custom food.</div>');
+}
+
+let recentList=[];
+function renderRecent(){
+  const seen=new Set(),out=[];
+  for(const id of S.fav)if(S.foods[id]&&!seen.has(id)){seen.add(id);out.push(S.foods[id])}
+  for(const d of Object.keys(S.log).sort().reverse())for(const e of [...S.log[d]].reverse())
+    if(S.foods[e.id]&&!seen.has(e.id)&&out.length<40){seen.add(e.id);out.push(S.foods[e.id])}
+  for(const id in S.foods)if(!seen.has(id)&&id.startsWith('custom:')){seen.add(id);out.push(S.foods[id])}
+  recentList=out;
+  $('recent').innerHTML=out.length?out.map((f,i)=>foodRow(f,i,'m',S.fav.includes(f.id))).join(''):
+    '<div class="msg">Foods you log appear here and work without signal.</div>';
+}
+
+function meterRows(t,T){
+  return NUT.map(([n,l,u])=>{const p=pct(t[n],T[n]);
+    return `<div class="m"><span>${l}</span><div class="tr"><i class="${cls(p)}" style="width:${Math.min(100,p)}%"></i></div>
+    <span><span class="pct">${p}%</span> ${r0(t[n])}/${T[n]}${u==='g'?'g':''}</span></div>`}).join('');
+}
+
+function renderHist(){
+  const days=Object.keys(S.log).filter(k=>S.log[k].length&&!S.offDays[k]).sort().reverse();
+  const offs=Object.keys(S.offDays).filter(k=>S.offDays[k]);
+  const cutoff=range?key(new Date(Date.now()-(range-1)*864e5)):'';
+  const sel=days.filter(k=>k>=cutoff&&k<=key(new Date()));
+  let h=`<div class="chips">${[[7,'7 days'],[30,'30 days'],[90,'90 days'],[0,'All time']].map(([v,l])=>
+    `<button class="chip ${v===range?'on':''}" data-rng="${v}">${l}</button>`).join('')}</div>`;
+  if(!sel.length){$('vHist').innerHTML=h+'<div class="card"><p class="msg">Nothing logged in this period yet.</p></div>';return}
+  const avg={k:0,p:0,c:0,fb:0,f:0},avgT={k:0,p:0,c:0,fb:0,f:0};let hitP=0,hitK=0,hitFb=0,fvSum=0,meals=0,bal=0;
+  for(const d of sel){const t=totals(S.log[d]),T=targetsFor(d);
+    for(const[n]of NUT){avg[n]+=t[n]/sel.length;avgT[n]+=T[n]/sel.length}
+    if(t.p>=T.p*0.95)hitP++;if(t.k>=T.k*0.95)hitK++;if(t.fb>=T.fb*0.95)hitFb++;
+    fvSum+=(S.habits[d]?.fv||0);const pl=S.plates[d]||{};
+    for(const m of MEALS)if(S.log[d].some(e=>e.meal===m)){meals++;if((pl[m]||[]).length===3)bal++}}
+  const nOff=offs.filter(k=>k>=cutoff&&k<=key(new Date())).length;
+  for(const n in avgT)avgT[n]=Math.round(avgT[n]);
+  h+=`<div class="card"><h2>Average per day <small>${sel.length} day${sel.length>1?'s':''} logged</small></h2>${meterRows(avg,avgT)}
+    <div class="grid5" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+      <div class="num"><b>${hitK}/${sel.length}</b>calorie target hit</div><div><b>${hitP}/${sel.length}</b>protein target hit</div><div><b>${hitFb}/${sel.length}</b>fibre target hit</div>
+      <div><b>${r1(fvSum/sel.length)}</b>avg 5 A Day</div><div><b>${meals?Math.round(bal/meals*100):0}%</b>balanced plates</div><div><b>${nOff}</b>day${nOff===1?'':'s'} off</div></div>
+    <div class="key"><span><i style="background:var(--acc)"></i>90–120%</span><span><i style="background:var(--warn)"></i>70–89% or over 120%</span><span><i style="background:var(--low)"></i>under 70%</span></div>
+    <p class="msg">Days off aren't counted. Look at the average, not single days – the NHS advises getting the balance right over a day or even a week.</p></div>`;
+  for(const d of sel){const t=totals(S.log[d]),T=targetsFor(d),w=S.weights[d];
+    h+=`<div class="card day"><h3>${fmtD(d)} <small>${w?w+'kg · ':''}${S.log[d].length} item${S.log[d].length>1?'s':''}</small></h3>${meterRows(t,T)}
+    <button class="add" data-open="${d}">View day</button></div>`}
+  $('vHist').innerHTML=h;
+}
+
+/* ---------- eat well ---------- */
+let eatTab='rec',recCat='Breakfast';
+function renderEat(){
+  $('eatRec').classList.toggle('hide',eatTab!=='rec');$('eatGuide').classList.toggle('hide',eatTab!=='guide');
+  document.querySelectorAll('[data-eat]').forEach(b=>b.classList.toggle('on',b.dataset.eat===eatTab));
+  $('guidePlate').innerHTML=plateSvg([],{all:true});
+  $('recCats').innerHTML=RCATS.map(c=>`<button class="chip ${c===recCat?'on':''}" data-rcat="${c}">${c}</button>`).join('');
+  $('recList').innerHTML=RECIPES.filter(r=>r.cat===recCat).map(r=>{const p=r.ps;
+    return `<details class="card rec"><summary><svg viewBox="0 0 40 40" aria-hidden="true">${plateSvg(r.plate.split(''))}</svg>
+      <div><b>${esc(r.name)}</b><small>${r.mins} min · serves ${r.serves} · <span class="num">${r0(p.k)} kcal · </span>${r0(p.p)}g protein${r.fv?` · ${r.fv} of 5 A Day`:''}</small></div></summary>
+      <div class="body">
+      <div class="ntab num"><div><b>${r0(p.k)}</b>kcal</div><div><b>${r0(p.p)}g</b>protein</div><div><b>${r0(p.c)}g</b>carbs</div><div><b>${r1(p.fb)}g</b>fibre</div>
+        <div><b>${r0(p.f)}g</b>fat</div><div><b>${r1(p.sf)}g</b>sat. fat</div><div><b>${r0(p.su)}g</b>sugars</div><div><b>${r1(p.sa)}g</b>salt</div></div>
+      <h4>Ingredients${r.serves>1?` (serves ${r.serves})`:''}</h4><ul>${r.ing.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>
+      <h4>Method</h4><p style="margin:4px 0 8px">${esc(r.method)}</p>
+      ${r.note?`<div class="note">${esc(r.note)}</div>`:''}
+      <button class="btn" data-rec="${r.id}" style="width:100%">Log a serving</button></div></details>`}).join('');
+}
+function recipeFood(r){return{id:'recipe:'+r.id,name:r.name,brand:'Recipe',...r.per100,serving:r.sw,servingLbl:'1 serving',plate:r.plate,fvPer:r.fv}}
+
+/* ---------- targets page ---------- */
+function fillProfile(){
+  const P=S.profile;$('pSex').value=P.sex;$('pAge').value=P.age;$('pCm').value=P.cm;$('pKg').value=P.kg;
+  const ti=P.cm/2.54;$('pFt').value=Math.floor(ti/12);$('pIn').value=r1(ti%12);
+  $('pAct').value=String(P.act);$('pGoal').value=String(P.goal);
+  $('pPro').value=String(P.pro);
+}
+function renderTargets(){
+  const P=S.profile,T=calc(P);
+  $('tgtGoal').textContent=$('pGoal').selectedOptions[0]?.textContent.split(' –')[0]||'';
+  $('tgtBox').innerHTML=[
+    ['Calories',T.k+' kcal',`maintenance ≈ ${T.tdee} kcal`],
+    ['Protein',T.p+'g',`${P.pro} g/kg · ${r0(T.p*4/T.k*100)}% of calories`],
+    ['Carbs',T.c+'g',`${r1(T.c/P.kg)} g/kg · ${r0(T.c*4/T.k*100)}% of calories`],
+    ['Fibre',T.fb+'g','UK adult guideline'],
+    ['Fat',T.f+'g',`1 g/kg · ${r0(T.f*9/T.k*100)}% of calories`],
+    ['Water',`${r1(T.wLo/1000)}–${r1(T.wHi/1000)} L`,`about ${T.wGl} glasses · 30–35 ml per kg`]
+  ].map(([l,v,s])=>`<div>${l}<b>${v}</b><small>${s}</small></div>`).join('');
+  const notes=[];
+  if(T.c/P.kg<3)notes.push('Carbs are below 3 g/kg, which is low for training. Consider a smaller deficit.');
+  if(P.goal>0)notes.push('Aim to gain about 0.25–0.5kg a week. If the scale hasn\'t moved after 2 weeks, add 150–200 kcal; if it\'s rising faster, take some off.');
+  if(P.goal<0)notes.push('Keep protein high while cutting to hold on to muscle.');
+  $('tgtNote').textContent=notes.join(' ');
+  const ws=Object.keys(S.weights).sort().reverse();
+  $('wList').innerHTML=ws.length?ws.slice(0,20).map(d=>`<div><span>${fmtD(d)}</span><b>${S.weights[d]} kg</b></div>`).join(''):
+    '<p class="msg">Log your weight here once a week (same time of day) to see your rate of gain.</p>';
+  if(ws.length>1){const a=ws[ws.length-1],b=ws[0],wk=(new Date(b)-new Date(a))/6048e5;
+    $('wTrend').textContent=wk>0?`${(S.weights[b]-S.weights[a]>=0?'+':'')}${r1((S.weights[b]-S.weights[a])/wk*100)/100} kg/week`:''}
+  else $('wTrend').textContent='';
+}
+function readProfile(src){
+  const P=S.profile;
+  if(src==='pFt'||src==='pIn'){const ft=+$('pFt').value||0,inch=+$('pIn').value||0;if(ft||inch){P.cm=r1((ft*12+inch)*2.54);$('pCm').value=P.cm}}
+  if(src==='pCm'){const cm=+$('pCm').value;if(cm){P.cm=cm;const ti=cm/2.54;$('pFt').value=Math.floor(ti/12);$('pIn').value=r1(ti%12)}}
+  P.sex=$('pSex').value;P.age=+$('pAge').value||P.age;P.kg=+$('pKg').value||P.kg;
+  P.act=+$('pAct').value;P.goal=+$('pGoal').value;P.pro=+$('pPro').value;
+  snapshot();renderTargets();renderTop();
+}
+for(const id of['pSex','pAge','pFt','pIn','pCm','pKg','pAct','pGoal','pPro'])
+  $(id).addEventListener(id.startsWith('p')&&$(id).tagName==='SELECT'?'change':'input',()=>readProfile(id));
+
+/* ---------- sheet ---------- */
+let pending=null;
+function openAmount(f){
+  pending=f;const fav=S.fav.includes(f.id);
+  const opts=[];if(f.serving)opts.push(`<option value="s">servings (${esc(f.servingLbl||f.serving+'g')})</option>`);
+  opts.push(`<option value="g">grams</option>`);
+  $('sheetBody').innerHTML=`<h2 style="margin:0 0 4px;font-size:18px">${esc(f.name)}</h2>
+   <div class="msg" style="padding:0">${[f.brand,f.store].filter(Boolean).map(esc).join(' · ')}</div>
+   <div class="grid2"><div><label for="amt">Amount</label><input id="amt" type="number" inputmode="decimal" value="${f.serving?1:100}"></div>
+   <div><label for="unit">Unit</label><select id="unit">${opts.join('')}</select></div></div>
+   <div class="quick" id="quick">${(f.serving?[['½ serving','s',.5],['1 serving','s',1],['2 servings','s',2]]:[]).concat([['50g','g',50],['100g','g',100],['150g','g',150],['200g','g',200]])
+     .map(([l,u,a])=>`<button data-q="${u}:${a}">${l}</button>`).join('')}</div>
+   <label for="mealSel">Meal</label><select id="mealSel">${MEALS.map(m=>`<option ${m===meal?'selected':''}>${m}</option>`).join('')}</select>
+   <div class="grid5" id="prev5"></div>
+   <div class="srow"><button class="btn ghost" id="favB">${fav?'★ Favourite':'☆ Favourite'}</button><button class="btn" id="logB" style="flex:1">Add to log</button></div>
+   <button class="add" id="cancelB" style="width:100%">Cancel</button>`;
+  const upd=()=>{const g=grams();$('prev5').innerHTML=NUT.map(([n,l])=>`<div><b>${n==='k'?r0(f.k*g/100):r1((f[n]||0)*g/100)+'g'}</b>${l.toLowerCase()}</div>`).join('')};
+  $('amt').oninput=upd;$('unit').onchange=upd;upd();
+  $('quick').onclick=e=>{const b=e.target.closest('button');if(!b)return;const[u,a]=b.dataset.q.split(':');$('unit').value=u;$('amt').value=a;upd()};
+  $('sheet').classList.add('open');
+}
+const grams=()=>{const a=parseFloat($('amt').value)||0;return $('unit').value==='s'?a*pending.serving:a};
+function closeSheet(){$('sheet').classList.remove('open');pending=null}
+function openCustom(){
+  $('sheetBody').innerHTML=`<h2 style="margin:0 0 8px;font-size:18px">Custom food</h2>
+  <label for="cn">Name</label><input id="cn" placeholder="e.g. Mass gainer">
+  <label>Values per 100g (from the label)</label>
+  <div class="grid2"><input id="ck" type="number" inputmode="decimal" placeholder="kcal">
+  <input id="cp" type="number" inputmode="decimal" placeholder="Protein g">
+  <input id="cc" type="number" inputmode="decimal" placeholder="Carbs g">
+  <input id="cfb" type="number" inputmode="decimal" placeholder="Fibre g">
+  <input id="cf" type="number" inputmode="decimal" placeholder="Fat g"></div>
+  <label for="cs">Serving size in grams (optional)</label><input id="cs" type="number" inputmode="decimal" placeholder="e.g. 100 for one scoop">
+  <div class="srow" style="margin-top:12px"><button class="add" id="cancelB" style="flex:1">Cancel</button><button class="btn" id="cSave" style="flex:1">Save &amp; add</button></div>`;
+  $('sheet').classList.add('open');
+}
+
+/* ---------- Open Food Facts ---------- */
+async function search(){
+  const q=$('q').value.trim();if(!q)return;
+  renderResults('…');
+  const run=async(terms,st)=>{
+    const p=new URLSearchParams({search_terms:terms,search_simple:1,action:'process',json:1,page_size:40,sort_by:'unique_scans_n',fields:FIELDS,
+      tagtype_0:'countries',tag_contains_0:'contains',tag_0:'united-kingdom'});
+    if(st){p.set('tagtype_1','stores');p.set('tag_contains_1','contains');p.set('tag_1',st)}
+    const r=await fetch(OFF+'/cgi/search.pl?'+p);if(!r.ok)throw new Error(r.status);
+    return ((await r.json()).products||[]).map(fromOFF).filter(Boolean);
+  };
+  try{
+    let res=await run(q,store);
+    if(!res.length&&store){const name=STORES.find(s=>s[0]===store)[1];res=await run(q+' '+(store==='marks-and-spencer'?'marks spencer':name),'')}
+    lastResults=res;renderResults();
+  }catch(e){
+    renderResults(navigator.onLine?'The food database is busy (it allows about 10 searches a minute). Wait a moment and try again.':'No signal. Recent foods and custom foods still work.');
+  }
+}
+async function lookup(code){
+  code=String(code).replace(/\D/g,'');if(!code)return;
+  renderResults('Looking up '+code+'…');
+  try{const r=await fetch(`${OFF}/api/v2/product/${code}.json?fields=${FIELDS}`);const j=await r.json();
+    const f=j.product&&fromOFF(Object.assign({code},j.product));
+    if(!f){renderResults('Barcode not found, or it has no calorie data. Add it as a custom food.');return}
+    lastResults=[f];renderResults();openAmount(f);
+  }catch(e){renderResults('Could not reach the food database.')}
+}
+let stream=null,scanning=false;
+async function scan(){
+  if(scanning){stopScan();return}
+  if(!('BarcodeDetector'in window)){renderResults('This phone\'s browser can\'t scan barcodes here. Type the number under the barcode instead.');return}
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+    const v=$('vid');v.srcObject=stream;v.classList.remove('hide');await v.play();scanning=true;$('scan').textContent='Stop';
+    const det=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e']});
+    const tick=async()=>{if(!scanning)return;try{const c=await det.detect(v);if(c.length){stopScan();$('bc').value=c[0].rawValue;lookup(c[0].rawValue);return}}catch(e){}requestAnimationFrame(tick)};
+    tick();
+  }catch(e){stopScan();renderResults('Camera not available. Type the barcode number instead.')}
+}
+function stopScan(){scanning=false;$('scan').textContent='Scan';$('vid').classList.add('hide');if(stream)stream.getTracks().forEach(t=>t.stop());stream=null}
+
+/* ---------- theme ---------- */
+const PALETTES=[
+  ['Forest','#0f3d2e','#1f9d63','#f6f5f1'],['Ocean','#0b3954','#1e88e5','#f2f6fa'],['Berry','#4a1942','#c2185b','#faf3f6'],
+  ['Ember','#3b1f14','#e0622a','#faf5f0'],['Slate','#1f2933','#5b8def','#f3f4f6'],['Gold','#24211a','#c9a227','#f8f6ef'],
+  ['Lilac','#3d2c5e','#8e6cdb','#f6f3fb'],['Mono','#111111','#555555','#f4f4f4']];
+const DEF={mode:'auto',brand:'#0f3d2e',acc:'#1f9d63',bg:'#f6f5f1'};
+if(!S.theme)S.theme={...DEF};
+const lum=h=>{const n=parseInt(h.slice(1),16),c=[n>>16&255,n>>8&255,n&255].map(v=>{v/=255;return v<=.03928?v/12.92:((v+.055)/1.055)**2.4});
+  return .2126*c[0]+.7152*c[1]+.0722*c[2]};
+const onCol=h=>lum(h)>0.3?'#14201b':'#ffffff';
+function applyTheme(){
+  const T=S.theme,st=document.documentElement.style;
+  st.setProperty('--brand',T.brand);st.setProperty('--acc',T.acc);
+  st.setProperty('--hink',onCol(T.brand));st.setProperty('--accInk',onCol(T.acc));
+  for(const v of['--bg','--card','--ink','--mute','--line'])st.removeProperty(v);
+  if(T.mode==='custom'){
+    const dark=lum(T.bg)<0.25,ink=dark?'#eef2ef':'#15201b';
+    st.colorScheme=dark?'dark':'light';
+    st.setProperty('--bg',T.bg);st.setProperty('--ink',ink);
+    st.setProperty('--card',`color-mix(in srgb,${T.bg} ${dark?88:45}%,${dark?'#ffffff':'#ffffff'})`);
+    st.setProperty('--mute',`color-mix(in srgb,${ink} 62%,${T.bg})`);
+    st.setProperty('--line',`color-mix(in srgb,${ink} 14%,${T.bg})`);
+  }else st.colorScheme=T.mode==='auto'?'light dark':T.mode;
+  document.querySelector('meta[name=theme-color]').content=T.brand;
+  if($('pal')){
+    $('pal').innerHTML=PALETTES.map(([n,b,a,g],i)=>`<button data-pal="${i}" class="${b===T.brand&&a===T.acc?'on':''}">
+      <div class="sw"><i style="background:${b}"></i><i style="background:${a}"></i><i style="background:${g}"></i></div>${n}</button>`).join('');
+    $('cBrand').value=T.brand;$('cAcc').value=T.acc;$('cBg').value=T.bg;
+    document.querySelectorAll('#mode button').forEach(b=>b.classList.toggle('on',b.dataset.mode===T.mode));
+  }
+}
+const setTheme=p=>{Object.assign(S.theme,p);save();applyTheme()};
+$('cBrand').addEventListener('input',e=>setTheme({brand:e.target.value}));
+$('cAcc').addEventListener('input',e=>setTheme({acc:e.target.value}));
+$('cBg').addEventListener('input',e=>setTheme({bg:e.target.value,mode:'custom'}));
+
+/* ---------- first launch ---------- */
+function syncH(src,ft,inch,cm){
+  if(src===cm){const c=+$(cm).value;if(c){const ti=c/2.54;$(ft).value=Math.floor(ti/12);$(inch).value=r1(ti%12)}}
+  else{const f=+$(ft).value||0,i=+$(inch).value||0;if(f||i)$(cm).value=r1((f*12+i)*2.54)}
+}
+for(const id of['oFt','oIn','oCm'])$(id).addEventListener('input',()=>syncH(id,'oFt','oIn','oCm'));
+$('onbForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const sex=$('oSex').value,age=+$('oAge').value,cm=+$('oCm').value,kg=+$('oKg').value;
+  const bad=!sex?'Choose a sex (it changes the calorie formula).':!(age>=16&&age<=100)?'Enter an age between 16 and 100.':
+    !(cm>=120&&cm<=230)?'Enter your height in feet and inches, or centimetres.':!(kg>=35&&kg<=250)?'Enter your weight in kg.':'';
+  $('oErr').textContent=bad;if(bad)return;
+  S.profile={sex,age,cm,kg,act:+$('oAct').value,goal:+$('oGoal').value,pro:2};
+  S.tByDate={};S.weights={[key(new Date())]:kg};S.onboarded=true;
+  const T=snapshot();
+  $('oTgt').innerHTML=[['Calories',T.k+' kcal'],['Protein',T.p+'g'],['Carbs',T.c+'g'],['Fibre',T.fb+'g'],['Fat',T.f+'g'],['Water',`${r1(T.wLo/1000)}–${r1(T.wHi/1000)} L`]]
+    .map(([l,v])=>`<div>${l}<b>${v}</b></div>`).join('');
+  $('onbForm').classList.add('hide');$('onbDone').classList.remove('hide');window.scrollTo(0,0);$('onb').scrollTo?.(0,0);
+});
+$('oStart').addEventListener('click',()=>{$('onb').classList.add('hide');renderDay();show('vDay')});
+$('oRestore').addEventListener('click',()=>{$('onb').classList.add('hide');show('vTgt');const bk=$('bk');bk.classList.remove('hide');bk.focus();
+  $('bk').scrollIntoView({block:'center'})});
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button');if(!t)return;
+  if(t.dataset.v){if(t.dataset.v!=='vAdd')stopScan();show(t.dataset.v);if(t.dataset.v==='vDay')renderDay();return}
+  if(t.dataset.meal){meal=t.dataset.meal;show('vAdd');return}
+  if(t.dataset.del!=null){const L=dayLog(),i=+t.dataset.del,[e]=L.splice(i,1);save();renderDay();buzz();
+    toast('Removed '+(S.foods[e.id]?.name||'item'),()=>{L.splice(i,0,e);save();renderDay()});return}
+  if(t.id==='undo'){if(undoFn)undoFn();undoFn=null;$('toast').classList.remove('show');return}
+  if(t.dataset.pick!=null){openAmount((t.dataset.src==='r'?lastResults:recentList)[+t.dataset.pick]);return}
+  if(t.dataset.st!=null){store=t.dataset.st;renderStores();if($('q').value.trim())search();return}
+  if(t.dataset.rng!=null){range=+t.dataset.rng;renderHist();return}
+  if(t.dataset.pal!=null){const[,b,a,g]=PALETTES[+t.dataset.pal];setTheme({brand:b,acc:a,bg:g});return}
+  if(t.dataset.mode){setTheme({mode:t.dataset.mode});return}
+  if(t.id==='resetTheme'){S.theme={...DEF};save();applyTheme();return}
+  if(t.dataset.hab){const[k,d]=t.dataset.hab.split(':'),H=hab();H[k]=Math.max(0,Math.min(k==='w'?15:10,H[k]+ +d));save();renderDay();buzz();return}
+  if(t.dataset.plate){const[m,k]=t.dataset.plate.split(':'),P=plates(),a=P[m]||[];P[m]=a.includes(k)?a.filter(x=>x!==k):[...a,k];save();renderDay();buzz();return}
+  if(t.dataset.eat){eatTab=t.dataset.eat;renderEat();return}
+  if(t.dataset.rcat){recCat=t.dataset.rcat;renderEat();return}
+  if(t.dataset.rec){const r=RECIPES.find(x=>x.id===t.dataset.rec);meal=r.cat==='Breakfast'?'Breakfast':r.cat==='Lunch'?'Lunch':r.cat==='Dinner'?'Dinner':'Snacks';openAmount(recipeFood(r));return}
+  if(t.id==='offOn'){S.offDays[dk0()]=true;save();renderDay();toast('Day off – enjoy it',()=>{delete S.offDays[dk0()];save();renderDay()});return}
+  if(t.id==='offUndo'){delete S.offDays[dk0()];save();renderDay();return}
+  if(t.dataset.open){day=new Date(t.dataset.open+'T12:00');renderDay();show('vDay');return}
+  switch(t.id){
+    case'go':search();break;
+    case'bcGo':lookup($('bc').value);break;
+    case'scan':scan();break;
+    case'custom':openCustom();break;
+    case'cancelB':closeSheet();break;
+    case'prev':shiftDay(-1);break;
+    case'next':shiftDay(1);break;
+    case'dateLbl':day=new Date();day.setHours(12,0,0,0);renderDay();show('vDay');break;
+    case'favB':{const i=S.fav.indexOf(pending.id);S.foods[pending.id]=pending;i<0?S.fav.push(pending.id):S.fav.splice(i,1);save();
+      t.textContent=i<0?'★ Favourite':'☆ Favourite';break}
+    case'logB':{const g=r1(grams());if(g<=0)break;S.foods[pending.id]=pending;meal=$('mealSel').value;
+      const L=dayLog(),f=pending,P=plates(),H=hab(),before=[...(P[meal]||[])];let addFv=0;
+      L.push({id:f.id,g,meal});
+      if(f.plate)P[meal]=[...new Set([...(P[meal]||[]),...f.plate.split('')])];
+      if(f.fvPer&&f.serving){addFv=Math.round(f.fvPer*g/f.serving);H.fv+=addFv}
+      save();closeSheet();renderDay();show('vDay');buzz();
+      const nums=S.prefs?.nums!==false;
+      toast(`Added ${f.name}${nums?` · ${r0(f.k*g/100)} kcal`:''}${addFv?` · +${addFv} of 5 A Day`:''}`,()=>{const i=L.findLastIndex(e=>e.id===f.id);if(i>-1)L.splice(i,1);
+        P[meal]=before;H.fv=Math.max(0,H.fv-addFv);save();renderDay()});break}
+    case'cSave':{const name=$('cn').value.trim(),k=parseFloat($('ck').value);if(!name||isNaN(k))break;
+      const f={id:'custom:'+Date.now(),name,brand:'Custom',k,p:+$('cp').value||0,c:+$('cc').value||0,fb:+$('cfb').value||0,f:+$('cf').value||0,
+        serving:+$('cs').value||null,servingLbl:$('cs').value?$('cs').value+'g serving':''};
+      S.foods[f.id]=f;save();openAmount(f);break}
+    case'copyY':{const y=new Date(day);y.setDate(y.getDate()-1);const src=S.log[key(y)]||[];
+      if(!src.length){t.textContent='Nothing logged the day before';break}
+      dayLog().push(...src.map(e=>({...e})));save();renderDay();break}
+    case'weighIn':{const kg=+$('pKg').value;if(!kg)break;S.weights[key(new Date())]=kg;readProfile('pKg');t.textContent='Logged';setTimeout(()=>t.textContent='Log weigh-in',1200);break}
+    case'exp':{const txt=JSON.stringify(S);const bk=$('bk');bk.classList.remove('hide');bk.value=txt;
+      navigator.clipboard?.writeText(txt).then(()=>t.textContent='Copied',()=>{bk.select();t.textContent='Select & copy below'});break}
+    case'imp':{const bk=$('bk');if(bk.classList.contains('hide')||!bk.value.trim()){bk.classList.remove('hide');bk.value='';bk.focus();break}
+      try{const d=JSON.parse(bk.value);if(!d.log||!d.foods)throw 0;S=Object.assign(S,d);save();renderDay();t.textContent='Restored'}catch(err){t.textContent='Not a valid backup'}break}
+  }
+});
+$('sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
+$('q').addEventListener('keydown',e=>{if(e.key==='Enter')search()});
+$('bc').addEventListener('keydown',e=>{if(e.key==='Enter')lookup($('bc').value)});
+function shiftDay(n){day.setDate(day.getDate()+n);renderDay();show('vDay');const v=$('vDay');v.classList.remove('slideL','slideR');void v.offsetWidth;v.classList.add(n>0?'slideL':'slideR');buzz()}
+let tx=0,ty=0;
+$('vDay').addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+$('vDay').addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)>70&&Math.abs(dy)<45)shiftDay(dx<0?1:-1)},{passive:true});
+function renderStores(){$('stores').innerHTML=STORES.map(([v,l])=>`<button class="chip ${v===store?'on':''}" data-st="${v}">${l}</button>`).join('')}
+
+if(FRESH&&!S.onboarded){$('onb').classList.remove('hide')}
+else{S.onboarded=true;if(!Object.keys(S.tByDate).length)snapshot()}
+$('numsT').checked=S.prefs?.nums!==false;
+$('numsT').addEventListener('change',e=>{S.prefs=S.prefs||{};S.prefs.nums=e.target.checked;save();applyNums();renderTop()});
+applyNums();applyTheme();renderStores();renderDay();
+}
+</script>
+</body>
+</html>
